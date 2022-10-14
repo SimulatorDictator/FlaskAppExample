@@ -1,4 +1,5 @@
 # How your databases are going to look. 
+from sqlalchemy import ForeignKey
 from application import db 
 
 class Lists(db.Model):
@@ -9,3 +10,4 @@ class Todos(db.Model):
     tid = db.Column(db.Integer, primary_key=True)
     tasks = db.Column(db.String(30))
     complete = db.Column(db.Boolean, default=False)
+    fk_lid = db.Column(db.Integer, db.ForeignKey('lists.lid'))
