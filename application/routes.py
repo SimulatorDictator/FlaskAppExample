@@ -70,6 +70,19 @@ def update(tid):
     # If we go to the url return the template update.html
     return render_template('update.html', title='Update you task', form=form)
 
+@app.route('/updatelist/<int:lid>', methods=['GET', 'POST'])
+def updatelist(lid):
+    form = ListForm()
+    lists_ = Lists.query.get(lid)
+    if form.validate_on_submit():
+        lists_.name = form.name.data
+        db.session.commit()
+        return redirect(url_for('index'))
+    elif request.method == 'GET':
+        form.name.data = lists_.name
+    return render_template('updatelist.html', title='Update your list', form=form)
+
+
 
 #DELETE
 #Location of this functionality: ip_address:5000/delete/1
@@ -82,4 +95,11 @@ def delete(tid):
     # committing this change
     db.session.commit()
     # returning the url in the index function. 
+    return redirect(url_for('index'))
+
+@app.route('/deletelist/<int:lid>')
+def deletelist(lid):
+    lists_ = Lists.query.get(lid)
+    db.session.delete(lists_)
+    db.session.commit
     return redirect(url_for('index'))
