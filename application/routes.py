@@ -7,10 +7,22 @@ from application.forms import TodoForm, ListForm
 #READ 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+    lists = Lists.query.all()
     todos = Todos.query.all()
-    return render_template('index.html', title="To do List", todos=todos)
+    return render_template('index.html', title="To do List", todos=todos, lists=lists)
 
 #CREATE 
+@app.route('/addlist', methods=['POST', 'GET'])
+def listadd():
+    form = ListForm()
+    if form.validate_on_submit():
+        lists = Lists(
+            name = form.name.data
+        )
+        db.session.add(lists)
+        db.session.commit
+        return render_template('.addlists.html', title="Add a new Task, form=form")
+
 @app.route('/add', methods=['POST','GET'])
 def add():
     form = TodoForm()
