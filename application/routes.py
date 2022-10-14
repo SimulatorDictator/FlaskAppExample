@@ -26,6 +26,17 @@ def add():
     return render_template('add.html', title="Add a new Task", form=form)
 
 #UPDATE 
+@app.route('/update/<int:tid>', methods=['GET', 'POST'])
+def update(tid):
+    form = TodoForm()
+    tasks = Todos.query.get(tid)
+    if form.validate_on_submit():
+        tasks.tasks = form.tasks.data
+        db.session.commit()
+    elif request.method =='GET':
+        form.tasks.data = tasks.tasks
+
+    return render_template('update.html', title='Update your task', form=form)
 
 #DELETE
 @app.route('/delete/<int:tid>')
